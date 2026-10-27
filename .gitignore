@@ -1,0 +1,7 @@
+# Raw BTS downloads (monthly zips + manifest) -- fetched by
+# src/01_download_data.py, never committed. See data/README_DATA.md.
+data/raw/
+
+__pycache__/
+*.pyc
+.venv/
