@@ -1,0 +1,77 @@
+AIRLINE ON-TIME BTS -- BUILD LOG
+Project: ~/workspace/github-projects/airline-ontime-bts
+Built: 2026-10-27 (America/New_York) | Python: venv ~/workspace/tools/oulad-venv
+       (pandas 3.1.0, numpy 2.5.4, matplotlib 3.11.2)
+Scope: BTS Reporting Carrier On-Time Performance, calendar year 2024, 12 monthly
+       PREZIP files from transtats.bts.gov. Local build only; nothing published.
+
+[1] SOURCE ROUTE -- filename discrepancy found and resolved
+    Task brief's URL form:
+      https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_(1987-present)_2024_1.zip
+      -> HTTP 404 (also with %28/%29 encoding and with _2024_01).
+    The /PREZIP/ directory listing itself is live (HTTP 200). Grepping it shows
+    the current naming uses underscores:
+      On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_M.zip
+    All 12 months for 2024 present under that name. Same BTS table and host --
+    only the file naming changed. The download script documents this.
+
+[2] DOWNLOAD -- src/01_download_data.py (exit 0, ~3.5 min)
+    12 files, 354,314,874 bytes total. Manifest written to
+    data/raw/download_manifest.json with URL, bytes, HTTP Last-Modified and
+    SHA-256 per file. January size (27,573,265) matches the server's
+    Content-Length header exactly. December's server Last-Modified is
+    Fri, 14 Mar 2025 -- the day BTS published the full-year 2024 ATCR.
+    Each zip holds exactly 2 members: the monthly CSV plus readme.html
+    (BTS's record layout). CSV member names retain the legacy parenthesised
+    form inside the zip.
+
+[3] VERIFY -- src/00_verify_data.py (exit 0, ~86 s)
+    SHA-256 and size re-checked per file: 12/12 match manifest.
+    Row counts (stdlib csv module streaming the zips):
+      Jan 547,271 | Feb 519,221 | Mar 591,767 | Apr 582,185 | May 609,743
+      Jun 611,132 | Jul 634,613 | Aug 619,025 | Sep 582,622 | Oct 615,497
+      Nov 575,404 | Dec 590,581 | TOTAL 7,079,061
+    January raw-newline count 547,272 == header + records: MATCH.
+    Bundled readme.html SHA-256 identical in all 12 files:
+      0ba795b87d903d1b556ea93c19924cab0d240deb478e53a2f551b37ea6686867
+    Wrote outputs/data_verification.json (incl. ATCR published figures and
+    the marketing-vs-operating scope note: Dec scheduled 590,581 here vs
+    631,944 ATCR marketing, -6.5%; same ~6% gap in April).
+
+[4] ANALYSIS -- src/02_ontime_analysis.py
+    Attempt 1: pandas read of the raw zip failed -- "Multiple files found in
+    ZIP file" (CSV + readme.html). Fixed: open the manifest's csv_member
+    explicitly via zipfile.
+    Attempt 2: process killed (exit 137, OOM) with the wide column set in
+    8 GB RAM. Fixed: load only the 17 used columns, categorical dtypes for
+    carrier/airport codes; airport city labels read in a separate light pass.
+    Run 1 (exit 0, ~79 s) and Run 2 (exit 0, ~82 s):
+      outputs/metrics.json SHA-256 both runs:
+        961151e266736fc38ea104fd6f69fcd8fd1a62d6dc2a60557f73a34f95c098d7
+      -> byte-identical; determinism confirmed.
+    Pandas loaded counts == independent csv counts, all 12 months (asserted
+    inside metrics.json: loaded_rows_match_independent_csv_counts = true).
+
+[5] HEADLINE OUTPUTS (from outputs/metrics.json)
+    Scheduled 7,079,061 | cancelled 96,315 (1.36%) | diverted 17,499
+    On-time arrivals 79.18% | delayed 15+ min: 1,449,966 (20.82%),
+    mean 71.6 min, median 41.0 min | mean over all arrivals 15.9 min
+    Best month Oct 86.80% | worst Jul 70.38% | most cancellations Jan (3.73%)
+    Causes (share of 103,794,712 minutes): late aircraft 40.44%,
+    carrier 34.51%, NAS 18.90%, weather 5.97%, security 0.17%
+    Cause identity check: five causes sum exactly to ArrDelayMinutes for
+    100.0% of the 1,449,964 delayed flights carrying cause fields
+    (2 delayed flights carry none).
+    Evening effect: 03-05 block 90.86% on time -> 18-20 block 70.12%.
+    Carriers: best OTP Republic (YX) 85.93%; best big brand Delta 82.74%;
+    lowest cancellations Southwest 0.83%; worst OTP Frontier 71.26%.
+    ILM: arr OTP 79.67%, dep cancellations 1.75% (n=8,069 dep)
+    DTW: arr OTP 82.00%, dep cancellations 1.03%, delayed arr mean 80.0 min
+    Quirk: exactly 1 record has CRSDepTime 2400 (hour "24" in metrics);
+    departure blocks therefore sum to 7,079,060.
+
+[6] CHARTS (outputs/charts/, regenerated identically by both analysis runs)
+    monthly_ontime_trend.png   96,279 bytes  sha256 53f55b6c513d...
+    departure_hour_effect.png  51,286 bytes  sha256 87a53f2d3f9d...
+    delay_cause_shares.png     49,487 bytes  sha256 a2498001b088...
+    All three visually inspected after generation.

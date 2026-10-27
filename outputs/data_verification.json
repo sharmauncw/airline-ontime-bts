@@ -1,0 +1,133 @@
+{
+  "year": 2024,
+  "per_month": {
+    "1": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_1.zip",
+      "rows": 547271,
+      "bytes": 27573265,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "2": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_2.zip",
+      "rows": 519221,
+      "bytes": 25086854,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "3": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_3.zip",
+      "rows": 591767,
+      "bytes": 29313663,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "4": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_4.zip",
+      "rows": 582185,
+      "bytes": 28540589,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "5": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_5.zip",
+      "rows": 609743,
+      "bytes": 31139902,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "6": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_6.zip",
+      "rows": 611132,
+      "bytes": 31226761,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "7": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_7.zip",
+      "rows": 634613,
+      "bytes": 34427174,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "8": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_8.zip",
+      "rows": 619025,
+      "bytes": 30854511,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "9": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_9.zip",
+      "rows": 582622,
+      "bytes": 28433978,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "10": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_10.zip",
+      "rows": 615497,
+      "bytes": 29418453,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "11": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_11.zip",
+      "rows": 575404,
+      "bytes": 28149354,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    },
+    "12": {
+      "file": "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_12.zip",
+      "rows": 590581,
+      "bytes": 30150370,
+      "sha256_matches_manifest": true,
+      "size_matches_manifest": true
+    }
+  },
+  "total_rows_2024": 7079061,
+  "line_vs_record_check_january": {
+    "month": 1,
+    "raw_newlines_in_csv": 547272,
+    "data_rows_plus_header": 547272,
+    "one_line_equals_one_record": true
+  },
+  "bundled_bts_readme": {
+    "readme_present_in_all_files": true,
+    "readme_sha256_identical_all_months": true,
+    "readme_sha256": "0ba795b87d903d1b556ea93c19924cab0d240deb478e53a2f551b37ea6686867",
+    "note": "readme.html is BTS's own record layout bundled inside each PREZIP file -- the primary field documentation for this table, identical across all of 2024."
+  },
+  "published_expectations": {
+    "december_2024_scheduled_flights": {
+      "value": 631944,
+      "basis": "marketing carriers",
+      "source": "BTS ATCR Dec 2024 / full-year 2024 release, Mar 14 2025"
+    },
+    "december_2024_cancelled_flights": {
+      "value": 4579,
+      "basis": "marketing carriers",
+      "source": "BTS ATCR Dec 2024 / full-year 2024 release, Mar 14 2025"
+    },
+    "full_year_2024_cancellation_rate_pct": {
+      "value": 1.4,
+      "basis": "marketing carriers",
+      "source": "BTS ATCR Dec 2024 / full-year 2024 release, Mar 14 2025"
+    },
+    "full_year_2024_ontime_arrival_pct": {
+      "value": 78.1,
+      "basis": "marketing carriers",
+      "source": "BTS ATCR full-year 2024 (on-time arrival rate 78.10%)"
+    },
+    "table_total_records_all_years": {
+      "value": 235618745,
+      "basis": "whole table, 1987-Aug 2026",
+      "source": "BTS TranStats Table Profile, Reporting Carrier On-Time Performance (1987-present), read 2026-10-27"
+    }
+  },
+  "notes": [
+    "Published-comparison basis: the ATCR figures under 'published_expectations' are for the 10 MARKETING carrier networks (brand-level). This table is by OPERATING (reporting) carrier. OBSERVED GAP: December 2024 scheduled flights here = 590,581 vs ATCR's 631,944 marketing figure (-6.5%); the same ~6% gap appears in other months (e.g. April: 582,185 here vs 619,920). The marketing file additionally counts branded code-share flying operated by small partner carriers that do not report into this table, which accounts for the bulk of the count gap; the RATES (on-time %, cancellation %) are still directly comparable and are checked against ATCR's full-year figures (78.10% on-time arrivals, 1.4% cancelled) in the analysis. The gap is a scope difference between two BTS products, not a download defect: every file's SHA-256 matches the manifest, the January line/record check matches exactly, and the analysis's pandas counts reproduce these csv-module counts row for row.",
+    "Row counts here come from the csv module streaming the zips directly -- independent of the pandas load in the analysis script, which must reproduce the same per-month counts (the analysis records its loaded counts in outputs/metrics.json)."
+  ]
+}
